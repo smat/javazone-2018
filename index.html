@@ -113,6 +113,13 @@ vim: set foldcolumn=5 foldlevel=99 foldmethod=expr :
 							Ble rullet ut i Februar/Mars
 						</aside>
 					</section>
+					<section>
+						<aside class="notes">
+							Gå igjennom noen av utfordringene vi hadde.</br>
+							Si hvordan vi valgte å løse problemet, hvorfor vi løste det slik.</br>
+							Og forhåpentligvis forklare hvorfor det kan være noe for dere.
+						</aside>
+					</section>
 				</section>
 				<section>
 					<section data-background="images/IMG_4731.jpg" data-background-opacity="0.3" data-background-color="#000000">
@@ -212,6 +219,7 @@ message Rect {
 						<h1>Utfordring:</h1>
 						<h2>Detektering bruker mye CPU</h2>
 					</section>
+					<!-- Film av motion detection -->
 				</section>
 				<section>
 					<section data-background="images/IMG_4731.jpg" data-background-opacity="0.3" data-background-color="#000000">
@@ -228,11 +236,33 @@ message Rect {
 						<img src="/images/tornado-fx-logo.png" alt="TornadoFX" width="30%" class="no-border">
 						<aside class="notes">
 							Har brukt JavaFX med Kotlin og TornadoFX<br/>
-							Veldig fornøyd med det veldig mye enklere enn C++/Qt
+							Veldig fornøyd med det veldig mye enklere enn C++/Qt<br/>
+							Bruker også ZeroMQ og Protobuf for kommunikasjon med de andre prosessene
+						</aside>
+					</section>
+					<section>
+						<pre><code class="kotlin">class MainView : View("Autopay Onsite Gui") {
+    override val root = borderpane {
+        top = menubar {
+            menu("System") {
+                item("Exit") { exitGui()}
+            }
+        }
+        center = AllLanesView(model)
+    }
+}
+						</code></pre>
+						<aside class="notes">
+							Skal ikke gi innføring, men er er et lite eksempel<br/>
+							Veldig forenklet. Veldig digg å definere GUI i kode, og ikke XML
 						</aside>
 					</section>
 					<section>
 						<h1>Bilde av GUI</h1>
+						<aside class="notes">
+							Slik ser det ut. Ikke sykt pent, men veldig funksjonelt.
+							Har gjort litt mer med det siden release, men vi rakk å gjøre det ferdig.
+						</aside>
 					</section>
 				</section>
 				<section>
@@ -286,13 +316,110 @@ ssh-keygen -s server_ca -I "Stian_Mathiassen" \
 				<section>
 					<section data-background="images/IMG_4731.jpg" data-background-opacity="0.3" data-background-color="#000000">
 						<h1>Utfordring:</h1>
-						<h2>Oppdater 120 servere samtidig</h2>
+						<h2>Oppdater 160 servere samtidig</h2>
+					</section>
+					<section>
+						<img src="images/Ansible_logo.svg" class="no-border" alt="Ansible">
+						<aside class="notes">
+							Vi bruker Ansible til å gjøre endringer<br/>
+							Vurderte Puppet og Salt også<br/>
+							Ansible virket enklere, og med lavere oppstartskost<br/>
+						</aside>
+					</section>
+					<section>
+						<pre><code class="bash">ansible-pull \
+  -d "/var/lib/ansible/local" \
+  -U "git@github.com:2Park/" \
+  -C "branch" \
+  --extra-vars "@/var/lib/ansible/extra_vars.yml" \
+  "ocr-server.yml"
+</code></pre>
+						<aside class="notes">
+							Bruker Ansible-pull, så vi ikke er avhengig av at SSH-tunnelen er oppe
+						</aside>
+					</section>
+					<section>
+						<pre style="font-size: 0.3em;"><code class="xml">&lt;plugin&gt;
+    &lt;artifactId&gt;jdeb&lt;/artifactId&gt;
+    &lt;groupId&gt;org.vafer&lt;/groupId&gt;
+    &lt;executions&gt;
+        &lt;execution&gt;
+            &lt;phase&gt;package&lt;/phase&gt;
+            &lt;goals&gt;
+                &lt;goal&gt;jdeb&lt;/goal&gt;
+            &lt;/goals&gt;
+            &lt;configuration&gt;
+                &lt;dataSet&gt;
+                    &lt;data&gt;
+                        &lt;type&gt;file&lt;/type&gt;
+                        &lt;src&gt;${project.build.directory}/${project.build.finalName}-allinone.jar&lt;/src&gt;
+                        &lt;dst&gt;/opt/autopay-onsite-gui/bin/autopay-onsite-gui.jar&lt;/dst&gt;
+                    &lt;/data&gt;
+                    &lt;data&gt;
+                        &lt;type&gt;file&lt;/type&gt;
+                        &lt;src&gt;${project.basedir}/src/deb/autopay-onsite-gui.desktop&lt;/src&gt;
+                        &lt;dst&gt;/usr/share/applications/autopay-onsite-gui.desktop&lt;/dst&gt;
+                    &lt;/data&gt;
+                &lt;/dataSet&gt;
+            &lt;/configuration&gt;
+        &lt;/execution&gt;
+    &lt;/executions&gt;
+&lt;/plugin&gt;
+</code></pre>
+						<aside class="notes">
+							Vi bruker Ubuntu som distro på serverene. Siden vi har både C++
+							og Java-apper, så pakker vi som deb.<br/>
+							Ganske enkelt i Maven. Gjør management veldig enkelt. Bruker artifactory i skyen.
+						</aside>
+					</section>
+					<section>
+						<pre><code class="yaml">- name: Set up artifactory as apt source
+  template:
+    src: autopay.list.j2
+    dest: /etc/apt/sources.list.d/autopay.list
+- name: Add GPG key for artifactory
+  copy:
+    src: autopay.gpg
+    dest: /etc/apt/trusted.gpg.d/autopay.gpg
+- name: Install Autopay ANPR
+  apt:
+    name: "autopay-anpr{{ anpr_version }}"
+- name: Install Autopay Parking Controller
+  apt:
+    name: "autopay-parking-controller{{ pc_version }}"
+						</code></pre>
+						<aside class="notes">
+							Så skal det ikke mye Ansible-kode for å få installert og
+							oppdatert applikasjonene<br/>
+							Har skrevet en liten config-app som hver server laster ned config
+							for sin server<br/>
+							Kunne vært løst med en inventory-fil, men vi ønsker å gjøre det
+							selvbetjent på web på sikt<br/>
+							Config er også delt opp i miljø, så vi det er lett å kjøre
+							igjennom før man ruller ut på alle maskiner. Vi har også en del
+							maskiner i prod som er beta.
+						</aside>
 					</section>
 				</section>
 				<section>
 					<section data-background="images/IMG_4731.jpg" data-background-opacity="0.3" data-background-color="#000000">
 						<h1>Utfordring:</h1>
 						<h2>Hvordan vet man et det fungerer?</h2>
+					</section>
+					<section data-background="images/monitoring_flow.svg" data-background-size="70%">
+					</section>
+					<section>
+						<pre><code class="ini">
+[[inputs.statsd]]
+  protocol = "udp"
+  service_address = ":8125"
+[[outputs.influxdb]]
+  urls = ["https://asdf.influxcloud.net:8086"]
+  database = "twopark_no"
+  write_consistency = "any"
+  username = "twopark_no"
+  password = "abcd"
+						</code></pre>
 					</section>
 				</section>
 				<section>
