@@ -1,6 +1,8 @@
 <!doctype html>
 <!--
-	vim: ts=2 sw=2 noexpandtab
+vim: ts=2 sw=2 noexpandtab
+vim: set foldexpr=SectionFold(v\:lnum) :
+vim: set foldcolumn=5 foldlevel=99 foldmethod=expr :
 -->
 <html>
 	<head>
@@ -27,48 +29,99 @@
 	<body id="body" class="hide-logo">
 		<div class="reveal" id="reveal">
 			<div class="slides">
-				<section data-logo="hide">
-					<h1>Tittel</h1>
-					<p>Test</p>
+				<section data-logo="hide" data-time="1">
+					<h1>Skikkelig garasje-IT</h1>
+					<p>Hvordan lager man et system når man har 120 servere i garasjer rundt i Europa</p>
 				</section>
-				<section>
+				<section data-time="5">
 					<section>
 						<h1>Hvem er jeg?</h1>
+						<aside class="notes">
+							Stian Mathiassen. Jobber som lead developer.
+						</aside>
+					</section>
+					<section>
+						Bildet av meg i sladdet Bring bil
+						<aside class="notes">
+							Tidliger vært konsulent hos stort logestikkselskap og stort banksamarbeid
+						</aside>
 					</section>
 				</section>
-				<section>
+				<section data-time="5">
 					<section>
 						<h1>Hvor jobber jeg?</h1>
 					</section>
 					<section data-background="images/2Park_L_transp.png" data-background-size="50%" data-logo="hide">
+						<aside class="notes">
+							Nå jobber jeg i et lite teknologiselskap som heter onepark
+						</aside>
 					</section>
 					<section data-background="images/Autopay_large.png" data-background-size="50%" data-logo="hide">
-					</section>
-					<section data-background-video="images/VID_20180418_144533.mp4" data-background-video-loop="true" data-background-video-muted="true" data-background-color="#000">
 						<aside class="notes">
+							Vi lager et system som heter Autopay. Som er et parkeringssystem for enclosed parking.
+							DVS Parkeringshus og garasjer. Derav garasje-IT.
+						</aside>
+					</section>
+					<section data-background-video="images/Snapchat-1576533284.mp4" data-background-video-loop="true" data-background-video-muted="true" data-background-color="#000">
+						<aside class="notes">
+							Det fungerer slik: Man kjører inn og så blir skiltet tatt bilde av, og registrert inn.
 							Kjører inn, blir tatt bildet av, osv
 						</aside>
 					</section>
 					<section>
 						<h2>Bildet av kiosk?</h2>
+						<aside class="notes">
+							Så kan sjåføren betale på en slik kiosk når han er ferdig med å parkere
+							Eller hvis han er registrert på nettsida med skilt og kort, kan han bare kjøre ut igjen uten å gjør noe
+						</aside>
 					</section>
-					<section data-background-video="images/Snapchat-1576533284.mp4" data-background-video-loop="true" data-background-video-muted="true" data-background-color="#000">
+					<section data-background-video="images/VID_20180418_144533.mp4" data-background-video-loop="true" data-background-video-muted="true" data-background-color="#000" data-time="3">
+						<aside class="notes">
+							Og da er det bare å kjøre ut igjen. Veldig enkelt.<br/>
+							Noen ganger må man kjøre en fullstacktest, som dere ser her
+						</aside>
 					</section>
 					<section>
-						<h2>Logo til alle operatørene</h2>
+						<img src="/images/EuroPark-harmaa-CMYK-ilman-Indigo-300dpi.png" alt="operator" width="30%" class="no-border">
+						<img src="/images/ONEPARK_Denmark.svg" alt="operator" width="30%" class="no-border">
+						<br/>
+						<img src="/images/Parkman_vektoriserad_liggande_lila_orange_transparentbg_CMYK.svg" alt="operator" width="30%" class="no-border">
+						<img src="/images/Autopay_Deutschland_Logo_Web.svg" alt="operator" width="30%" class="no-border">
+						<aside class="notes">
+							Systemet selges i flere operatører i flere land. Noen fra samme
+							konsern, og noen til selvstendige selskaper
+						</aside>
 					</section>
-					<section>
-						<h2>Kart over land</h2>
+					<section data-background="images/autopay_map.png" data-background-size="contain">
+						<aside class="notes">
+							Systemet brukes nå i 7 land, og vi planlegger å utvide i enda flere steder
+							200 000 parkeringer per uke.<br/>
+							Forventer 70 M parkeringer neste år, og 800 M NOK i omsetning<br/>
+							78 anlegg, 120 i løpet av året, 240 neste år
+						</aside>
 					</section>
 					<!-- si noe om historien, og hvorfor vi gjør endringen jeg skal snakke om -->
 				</section>
 				<section>
-					<section>
+					<section data-background="images/jason-leung-770944-unsplash_ZV7lnfyQLmA.jpg">
+						<!-- <span class="attribution"><a href="https://unsplash.com/photos/ZV7lnfyQLmA">Jason Leung on Unspash</a></span> -->
+						<aside class="notes">
+							Started som et system for å skrive bøter. Autopay er nå fem år gammelt. Første anlegg i 2013.<br/>
+							Eide ikke programvaren som kjørte i garasjene. Begynte å blir trøblete skalaen vi har i dag<br/>
+							Fikk ikke gjort så mange oppdateringer og endringer vi ønsket<br/>
+							Skrive for oss selv så vi har bedre kontroll og overvåkning<br/>
+							Ble rullet ut i Februar/Mars
+						</aside>
+					</section>
+				</section>
+				<section>
+					<section data-background="images/IMG_4731.jpg" data-background-opacity="0.3" data-background-color="#000000">
 						<h1>Utfordring:</h1>
 						<h2>Båndbredde for bilder</h2>
 					</section>
-					<section data-background="images/cameras_to_server.svg" data-background-size="80%">
+					<section>
 						<!-- <h1>Skjema over inn og utkjøring</h1> -->
+						<h1>Bilde av ARH-kamera</h1>
 						<aside class="notes">
 							<ul>
 								<li>8 kamera, 720p, 10 bilder/sec</li>
@@ -83,6 +136,7 @@
 							<ul>
 								<li>Lav båndbredde / ustabilt nett</li>
 								<li>Må analysere bilder på stedet</li>
+								<li>Alt nytt vi lager er i gcloud, men dette må leses på stedet</li>
 							</ul>
 						</aside>
 					</section>
@@ -94,37 +148,170 @@
 							<ul>
 								<li>Prøvde å skrive ANPR-delen i Java</li>
 								<li>Ikke raskt nok - Ikke fordel med GC</li>
+								<li>Veldig vanskelig å få til den ytelsen vi ønsket oss</li>
 								<li>C++ kan gjenbruke minneområdet</li>
-								<li>Kraftige motion dection algoritmer</li>
+								<li>Kraftige motion dection algoritmer, ferdig i OpenCV (finnes også for Java)</li>
 							</ul>
 						</aside>
 					</section>
+					<!--
 					<section>
 						<h2>Kodeeksempel fra OpenCV?</h2>
 					</section>
+					-->
 					<section>
 						<h2>Logikk for passeringer</h2>
 						<img src="/images/akka_full_color.svg" alt="Akka" width="50%" class="no-border">
 						<aside class="notes">
 							<ul>
-								<li>Passer meget bra til eventbaserte flyter</li>
+								<li>C++ er ikke enkelt</li>
+								<li>Ønsket å skrive forretingslogikken i Java</li>
+								<li>Passer meget bra til meldings-baserte flyter</li>
+								<li>Systemet vi har rundt er meldingsbasert</li>
+								<li>ANPR meldingbasert</li>
 							</ul>
 						</aside>
 					</section>
+					<!--
 					<section>
 						<h2>Kodeeksempel fra Akka?</h2>
 					</section>
-					<section>
-						<h2>Screenshot GUI</h2>
+					-->
+					<section data-background="images/cameras_to_server.svg" data-background-size="70%">
+						<aside class="notes">
+							Bruker også meldingsbasert flyt fra ANPR/C++ til parking-controller/Java/Akka<br/>
+							Bruker ZeroMQ (in-process) og Protobuf
+							Over TCP, siden Java ikke støtter så mange andre protokoller
+						</aside>
 					</section>
 					<section>
-						<h2>GUI</h2>
+						<h2>Protobuf</h2>
+						<pre><code class="protobuf">message Result {
+    Plate plate = 1;
+    bytes image = 2;
+    Rect image_frame = 3;
+    Rect region_of_interest = 4;
+    Rect anpr_frame = 5;
+    bytes plate_image = 6;
+}
+message Rect {
+    int32 x = 1;
+    int32 y = 2;
+    int32 width = 3;
+    int32 height = 4;
+}
+						</code></pre>
+						<aside class="notes">
+							Google Protobuf er et binært meldingsformat med bindings til mange forskjellige språk.<br/>
+							Meget rask serialisering, og passer meget bra for å overføre data mellom teknologier
+						</aside>
+					</section>
+				</section>
+				<section>
+					<section data-background="images/IMG_4731.jpg" data-background-opacity="0.3" data-background-color="#000000">
+						<h1>Utfordring:</h1>
+						<h2>Detektering bruker mye CPU</h2>
+					</section>
+				</section>
+				<section>
+					<section data-background="images/IMG_4731.jpg" data-background-opacity="0.3" data-background-color="#000000">
+						<h1>Utfordring:</h1>
+						<h2>Skriv et GUI på to uker</h2>
+						<aside class="notes">
+							Begynte å bli klar, men trengte et GUI<br/>
+							C++ er fortsatt ikke lett, vil helst gjøre det i Java<br/>
+							Gjør en del tester, og ser ut som det er raskt nok
+						</aside>
+					</section>
+					<section>
 						<img src="/images/kotlin_logo_text.svg" alt="Kotlin" width="30%" class="no-border">
 						<img src="/images/tornado-fx-logo.png" alt="TornadoFX" width="30%" class="no-border">
 						<aside class="notes">
-							<ul>
-								<li>Passer meget bra til eventbaserte flyter</li>
-							</ul>
+							Har brukt JavaFX med Kotlin og TornadoFX<br/>
+							Veldig fornøyd med det veldig mye enklere enn C++/Qt
+						</aside>
+					</section>
+					<section>
+						<h1>Bilde av GUI</h1>
+					</section>
+				</section>
+				<section>
+					<section data-background="images/IMG_4731.jpg" data-background-opacity="0.3" data-background-color="#000000">
+						<h1>Utfordring:</h1>
+						<h2>Serverene har ikke public IP</h2>
+						<aside class="notes">
+							Serverene våre har ikke public IP. Mange bruker vanlig bredbånd, noen er på 4G<br/>
+							VPN kan være ganske komplekst å sette opp. Vi har dårlig tid.
+						</aside>
+					</section>
+					<!--
+					<section>
+						<h1>Bilde av tunnell?</h1>
+					</section>
+					-->
+					<section>
+						<pre><code>/usr/bin/autossh -M 0 \
+  -o "StrictHostKeyChecking no" \
+  -o "ExitOnForwardFailure yes" \
+  -o "ServerAliveInterval 30" \
+  -o "ServerAliveCountMax 3" \
+  -N -T \
+  -R "8000:localhost:22" \
+  -i "file.key"
+  "admin@host"</code></pre>
+						<aside class="notes">
+							Får serveren til å sette opp en SSH-connection mot en server på internett med public IP<br/>
+							Setter opp tunnell så vi kan nå serveren</br>
+							Liten app som vi registrerer alle serverene i for å tilornde porter
+						</aside>
+					</section>
+					<section>
+						<h1>Hva med autentisering</h1>
+					</section>
+					<section>
+						<h1>(Open)SSH certificates</h1>
+					</section>
+					<section>
+						<pre><code class="bash"># Create certificate
+ssh-keygen -f server_ca
+# Sign certificate
+ssh-keygen -s server_ca -I "Stian_Mathiassen" \
+  -V +10w ~/.ssh/id_rsa.pub</code></pre>
+					</section>
+					<section>
+						<h3>.ssh/authorized_keys</h3>
+						<pre><code>cert-authority ssh-rsa AAAAB...== 2Park CA</code></pre>
+					</section>
+				</section>
+				<section>
+					<section data-background="images/IMG_4731.jpg" data-background-opacity="0.3" data-background-color="#000000">
+						<h1>Utfordring:</h1>
+						<h2>Oppdater 120 servere samtidig</h2>
+					</section>
+				</section>
+				<section>
+					<section data-background="images/IMG_4731.jpg" data-background-opacity="0.3" data-background-color="#000000">
+						<h1>Utfordring:</h1>
+						<h2>Hvordan vet man et det fungerer?</h2>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h1>Oppsummering?</h1>
+					</section>
+					<section data-logo="hide">
+						<img src="images/2Park_L_transp.png" alt="2Park" class="no-border" width="70%">
+						<h1>2park.no/careers/</h1>
+						<aside class="notes">
+							Vi søker medarbeidere
+						</aside>
+					</section>
+					<section>
+						<h1>Takk for meg!</h1>
+						<h3>Twitter: @smat</h3>
+						<h3>Epost: stian@2park.no</h3>
+						<aside class="notes">
+							Blir stående igjen for spørsmål
 						</aside>
 					</section>
 				</section>
@@ -132,6 +319,7 @@
 		</div>
 
 		<script src="lib/js/head.min.js"></script>
+		<script src="lib/js/underscore-min.js"></script>
 		<script src="js/reveal.js"></script>
 
 		<script>
@@ -163,6 +351,42 @@ Reveal.addEventListener( 'slidechanged', function( event ) {
 		document.getElementById("reveal").classList.remove("hide-logo");
 	}
 } );
+
+		_.chain(document.querySelectorAll("section"))
+				.filter(function(e) { return e.parentElement.nodeName !== "SECTION" })
+				.reduce(function(t, e) {
+					if (e.dataset && e.dataset['time']) {
+						t.timing = t.next;
+						t.next = t.timing + parseFloat(e.dataset['time']);
+					}
+					e.dataset['next'] = t.next;
+					e.dataset['timing'] = t.timing;
+					return t;
+				}, { timing: 0, next: 0 });
+		var showAsTimeInMin = function(t) {
+			t = parseFloat(t);
+			var min = Math.floor(t);
+			var sek = ((t % 1) * 60) + '';
+			return min + ":" + (sek.length === 1 ? "0" + sek : sek);
+		};
+		_.chain(document.querySelectorAll("section"))
+				.filter(function(e) { return e.dataset.timing; })
+				.each(function(e) { _.each(e.querySelectorAll("aside.notes"), function(n) {
+					var el = document.createElement("div");
+					el.style.position = "absolute";
+					el.style.right = "0";
+					el.style.top = "1.6em";
+					el.style.height = "2em";
+					el.style.width = "50%";
+					el.style.zIndex = 100;
+					el.style.textAlign = "right";
+					el.style.padding = "22px";
+					el.style.fontSize = "1.6em";
+					el.textContent = showAsTimeInMin(e.dataset.timing) + " - " + showAsTimeInMin(e.dataset.next);
+					n.insertBefore(el, n.firstChild);
+				})
+				});
+
 		</script>
 	</body>
 </html>
