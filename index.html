@@ -33,6 +33,7 @@ vim: set foldcolumn=5 foldlevel=99 foldmethod=expr :
 					<h1>Skikkelig<br/>garasje-IT</h1>
 					<p>Hvordan lager man et system når man har 160 servere i garasjer rundt i Europa</p>
 				</section>
+				<!--
 				<section data-time="5">
 					<section>
 						<h1>Hvem er jeg?</h1>
@@ -47,13 +48,11 @@ vim: set foldcolumn=5 foldlevel=99 foldmethod=expr :
 						</aside>
 					</section>
 				</section>
+				-->
 				<section data-time="5">
-					<section>
-						<h1>Hvor jobber jeg?</h1>
-					</section>
 					<section data-background="images/2Park_L_transp.png" data-background-size="50%" data-logo="hide">
 						<aside class="notes">
-							Nå jobber jeg i et lite teknologiselskap som heter onepark
+							Nå jobber jeg i et lite teknologiselskap som heter 2Park
 						</aside>
 					</section>
 					<section data-background="images/Autopay_large.png" data-background-size="50%" data-logo="hide">
@@ -68,8 +67,7 @@ vim: set foldcolumn=5 foldlevel=99 foldmethod=expr :
 							Kjører inn, blir tatt bildet av, osv
 						</aside>
 					</section>
-					<section>
-						<h2>Bildet av kiosk?</h2>
+					<section data-background="images/kiosk.jpg" data-background-color="#000">
 						<aside class="notes">
 							Så kan sjåføren betale på en slik kiosk når han er ferdig med å parkere
 							Eller hvis han er registrert på nettsida med skilt og kort, kan han bare kjøre ut igjen uten å gjør noe
@@ -130,9 +128,7 @@ vim: set foldcolumn=5 foldlevel=99 foldmethod=expr :
 							Joke om samboer i bakgrunnen
 						</aside>
 					</section>
-					<section>
-						<!-- <h1>Skjema over inn og utkjøring</h1> -->
-						<h1>Bilde av ARH-kamera</h1>
+					<section data-background="images/camera.jpg" data-background-color="#000">
 						<aside class="notes">
 							<ul>
 								<li>8 kamera, 720p, 10 bilder/sec</li>
@@ -265,8 +261,7 @@ message Rect {
 							Veldig forenklet. Veldig digg å definere GUI i kode, og ikke XML
 						</aside>
 					</section>
-					<section>
-						<h1>Bilde av GUI</h1>
+					<section data-background="images/gui_screenshot.png" data-background-color="#000" data-background-size="contain" data-logo="hide">
 						<aside class="notes">
 							Slik ser det ut. Ikke sykt pent, men veldig funksjonelt.
 							Har gjort litt mer med det siden release, men vi rakk å gjøre det ferdig.
@@ -276,49 +271,44 @@ message Rect {
 				<section>
 					<section data-background="images/IMG_4731.jpg" data-background-opacity="0.3" data-background-color="#000000">
 						<h1>Utfordring:</h1>
-						<h2>Serverene har ikke public IP</h2>
-						<aside class="notes">
-							Serverene våre har ikke public IP. Mange bruker vanlig bredbånd, noen er på 4G<br/>
-							VPN kan være ganske komplekst å sette opp. Vi har dårlig tid.
-						</aside>
-					</section>
-					<!--
-					<section>
-						<h1>Bilde av tunnell?</h1>
-					</section>
-					-->
-					<section>
-						<pre><code>/usr/bin/autossh -M 0 \
-  -o "StrictHostKeyChecking no" \
-  -o "ExitOnForwardFailure yes" \
-  -o "ServerAliveInterval 30" \
-  -o "ServerAliveCountMax 3" \
-  -N -T \
-  -R "8000:localhost:22" \
-  -i "file.key"
-  "admin@host"</code></pre>
-						<aside class="notes">
-							Får serveren til å sette opp en SSH-connection mot en server på internett med public IP<br/>
-							Setter opp tunnell så vi kan nå serveren</br>
-							Liten app som vi registrerer alle serverene i for å tilornde porter
-						</aside>
+						<h2>Re-installere 120 servere</h2>
 					</section>
 					<section>
-						<h1>Hva med autentisering</h1>
+						<img src="images/ubuntu_black-orange_hex.svg" alt="Ubuntu" class="no-border" width="70%">
 					</section>
 					<section>
-						<h1>(Open)SSH certificates</h1>
+						<h3>grub.cfg</h3>
+						<pre><code class="json">menuentry "Install Autopay Onsite" {
+  set gfxpayload=keep
+  linux /install/vmlinuz file=/cdrom/graphical.seed quiet
+  initrd /install/initrd.gz
+}</code></pre>
 					</section>
 					<section>
-						<pre><code class="bash"># Create certificate
-ssh-keygen -f server_ca
-# Sign certificate
-ssh-keygen -s server_ca -I "Stian_Mathiassen" \
-  -V +10w ~/.ssh/id_rsa.pub</code></pre>
+						<h3>Preseed</h3>
+						<pre style="font-size: 0.5em;"><code>d-i	preseed/early_command	string	sh /cdrom/early_command.sh
+d-i	preseed/late_command	string	sh /cdrom/bootstrap-autopay.sh</code></pre>
 					</section>
 					<section>
-						<h3>.ssh/authorized_keys</h3>
-						<pre><code>cert-authority ssh-rsa AAAAB...== 2Park CA</code></pre>
+						<h3>debconf</h3>
+						<pre><code class="bash">db_progress START 0 12 autopay-bootstrap/progress
+db_progress STEP 5
+
+if [ "$FIRST_RUN" -eq 1 ]; then
+  db_fset autopay-bootstrap/hostname seen true
+  FIRST_RUN=0
+else
+  db_fset autopay-bootstrap/hostname seen false
+fi
+
+db_fset autopay-bootstrap/otp_code seen false
+db_input critical autopay-bootstrap/otp_code || true
+
+db_input critical autopay-bootstrap/hostname
+
+db_go || exit</code></pre>
+					</section>
+					<section data-background="images/IMG_20180613_093949.jpg" data-background-color="#000">
 					</section>
 				</section>
 				<section>
@@ -337,7 +327,7 @@ ssh-keygen -s server_ca -I "Stian_Mathiassen" \
 					<section>
 						<pre><code class="bash">ansible-pull \
   -d "/var/lib/ansible/local" \
-  -U "git@github.com:2Park/" \
+  -U "git@github.com:2Park/repo" \
   -C "branch" \
   --extra-vars "@/var/lib/ansible/extra_vars.yml" \
   "ocr-server.yml"
@@ -412,9 +402,63 @@ ssh-keygen -s server_ca -I "Stian_Mathiassen" \
 				<section>
 					<section data-background="images/IMG_4731.jpg" data-background-opacity="0.3" data-background-color="#000000">
 						<h1>Utfordring:</h1>
+						<h2>Serverene har ikke public IP</h2>
+						<aside class="notes">
+							Serverene våre har ikke public IP. Mange bruker vanlig bredbånd, noen er på 4G<br/>
+							VPN kan være ganske komplekst å sette opp. Vi har dårlig tid.
+						</aside>
+					</section>
+					<!--
+					<section>
+						<h1>Bilde av tunnell?</h1>
+					</section>
+					-->
+					<section>
+						<pre class="bash"><code>/usr/bin/autossh -M 0 \
+  -o "StrictHostKeyChecking no" \
+  -o "ExitOnForwardFailure yes" \
+  -o "ServerAliveInterval 30" \
+  -o "ServerAliveCountMax 3" \
+  -N -T \
+  -R "8000:localhost:22" \
+  -i "file.key"
+  "admin@host"</code></pre>
+						<aside class="notes">
+							Får serveren til å sette opp en SSH-connection mot en server på internett med public IP<br/>
+							Setter opp tunnell så vi kan nå serveren</br>
+							Liten app som vi registrerer alle serverene i for å tilornde porter
+						</aside>
+					</section>
+					<section>
+						<h1>Hva med autentisering</h1>
+					</section>
+					<section>
+						<h1>(Open)SSH certificates</h1>
+					</section>
+					<section>
+						<pre><code class="bash"># Create certificate
+ssh-keygen -f server_ca
+# Sign certificate
+ssh-keygen -s server_ca -I "Stian_Mathiassen" \
+  -V +10w ~/.ssh/id_rsa.pub</code></pre>
+					</section>
+					<section>
+						<h3>.ssh/authorized_keys</h3>
+						<pre><code>cert-authority ssh-rsa AAAAB...== 2Park CA</code></pre>
+					</section>
+					<section>
+						<h3>known_hosts</h3>
+						<pre style="font-size: 0.5em;" class="sql"><code>The authenticity of host 'host (8.8.8.8)' can't be established.
+	ECDSA key fingerprint is SHA256:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcmoX+436BAPc.
+	Are you sure you want to continue connecting (yes/no)?</code></pre>
+					</section>
+				</section>
+				<section>
+					<section data-background="images/IMG_4731.jpg" data-background-opacity="0.3" data-background-color="#000000">
+						<h1>Utfordring:</h1>
 						<h2>Hvordan vet man et det fungerer?</h2>
 					</section>
-					<section data-background="images/monitoring_flow.svg" data-background-size="70%">
+					<section data-background="images/monitoring_flow.svg" data-background-size="90%">
 						<aside class="notes">
 							Bruker statsd fra apper til telegraf. Trenger bare å bry seg om localhost<br/>
 							Telegraf sender app-metrics og OS-metrics til InfluxDB<br/>
@@ -449,7 +493,7 @@ ssh-keygen -s server_ca -I "Stian_Mathiassen" \
 					</section>
 					<section>
 						<h3>Telegraf</h3>
-						<pre><code>[[inputs.tail]]
+						<pre><code class="ini">[[inputs.tail]]
   files = ["/var/log/telegraf/send_to_influxdb.log"]
   data_format = "influx"</code></pre>
 						<h3>send_to_influxdb.log</h3>
@@ -476,49 +520,6 @@ var trigger = data
         .channel(slack_channel)</code></pre>
 					</section>
 					<section data-background="images/kapacitor_slack.png" data-background-size="contain">
-					</section>
-				</section>
-				<section>
-					<section data-background="images/IMG_4731.jpg" data-background-opacity="0.3" data-background-color="#000000">
-						<h1>Utfordring:</h1>
-						<h2>Re-installere 120 servere</h2>
-					</section>
-					<section>
-						<img src="images/ubuntu_black-orange_hex.svg" alt="Ubuntu" class="no-border" width="70%">
-					</section>
-					<section>
-						<h3>grub.cfg</h3>
-						<pre><code class="json">menuentry "Install Autopay Onsite" {
-  set gfxpayload=keep
-  linux /install/vmlinuz file=/cdrom/graphical.seed quiet
-  initrd /install/initrd.gz
-}</code></pre>
-					</section>
-					<section>
-						<h3>Preseed</h3>
-						<pre style="font-size: 0.5em;"><code>d-i	preseed/early_command	string	sh /cdrom/early_command.sh
-d-i	preseed/late_command	string	sh /cdrom/bootstrap-autopay.sh</code></pre>
-					</section>
-					<section>
-						<h3>debconf</h3>
-						<pre><code class="bash">db_progress START 0 12 autopay-bootstrap/progress
-db_progress STEP 5
-
-if [ "$FIRST_RUN" -eq 1 ]; then
-  db_fset autopay-bootstrap/hostname seen true
-  FIRST_RUN=0
-else
-  db_fset autopay-bootstrap/hostname seen false
-fi
-
-db_fset autopay-bootstrap/otp_code seen false
-db_input critical autopay-bootstrap/otp_code || true
-
-db_input critical autopay-bootstrap/hostname
-
-db_go || exit</code></pre>
-					</section>
-					<section data-background="images/IMG_20180613_093949.jpg" data-background-color="#000">
 					</section>
 				</section>
 				<section>
