@@ -30,8 +30,8 @@ vim: set foldcolumn=5 foldlevel=99 foldmethod=expr :
 		<div class="reveal" id="reveal">
 			<div class="slides">
 				<section data-logo="hide" data-time="1">
-					<h1>Skikkelig garasje-IT</h1>
-					<p>Hvordan lager man et system når man har 120 servere i garasjer rundt i Europa</p>
+					<h1>Skikkelig<br/>garasje-IT</h1>
+					<p>Hvordan lager man et system når man har 160 servere i garasjer rundt i Europa</p>
 				</section>
 				<section data-time="5">
 					<section>
@@ -114,6 +114,7 @@ vim: set foldcolumn=5 foldlevel=99 foldmethod=expr :
 						</aside>
 					</section>
 					<section>
+						<h1>Hvorfor?</h1>
 						<aside class="notes">
 							Gå igjennom noen av utfordringene vi hadde.</br>
 							Si hvordan vi valgte å løse problemet, hvorfor vi løste det slik.</br>
@@ -217,13 +218,17 @@ message Rect {
 						</aside>
 					</section>
 				</section>
+				<!--
 				<section>
 					<section data-background="images/IMG_4731.jpg" data-background-opacity="0.3" data-background-color="#000000">
 						<h1>Utfordring:</h1>
 						<h2>Detektering bruker mye CPU</h2>
 					</section>
+				-->
 					<!-- Film av motion detection -->
+					<!--
 				</section>
+					-->
 				<section>
 					<section data-background="images/IMG_4731.jpg" data-background-opacity="0.3" data-background-color="#000000">
 						<h1>Utfordring:</h1>
@@ -410,9 +415,22 @@ ssh-keygen -s server_ca -I "Stian_Mathiassen" \
 						<h2>Hvordan vet man et det fungerer?</h2>
 					</section>
 					<section data-background="images/monitoring_flow.svg" data-background-size="70%">
+						<aside class="notes">
+							Bruker statsd fra apper til telegraf. Trenger bare å bry seg om localhost<br/>
+							Telegraf sender app-metrics og OS-metrics til InfluxDB<br/>
+							Vi kan vise grafer i Grafana, og alarmer kommer fra Kapacitor<br/>
+							Vurderte også Chronograf, men Grafana føles bedre, og støtter
+							flere kilder + multi-tenancy
+						</aside>
 					</section>
 					<section>
-						<pre><code class="ini">
+						<pre><code class="ini">[[inputs.cpu]]
+  percpu = true
+  totalcpu = true
+[[inputs.disk]]
+  ignore_fs = ["tmpfs", "devtmpfs", "devfs"]
+[[inputs.diskio]]
+  # No config needed :D
 [[inputs.statsd]]
   protocol = "udp"
   service_address = ":8125"
@@ -421,13 +439,91 @@ ssh-keygen -s server_ca -I "Stian_Mathiassen" \
   database = "twopark_no"
   write_consistency = "any"
   username = "twopark_no"
-  password = "abcd"
-						</code></pre>
+  password = "abcd"</code></pre>
+					</section>
+					<section data-background="images/grafana_advanced.png" data-background-size="contain" data-background-color="#171819">
+					</section>
+					<section data-background="images/grafana.png" data-background-size="contain" data-background-color="#171819">
+					</section>
+					<section data-background="images/grafana_tag.png" data-background-size="contain" data-background-color="#171819">
+					</section>
+					<section>
+						<h3>Telegraf</h3>
+						<pre><code>[[inputs.tail]]
+  files = ["/var/log/telegraf/send_to_influxdb.log"]
+  data_format = "influx"</code></pre>
+						<h3>send_to_influxdb.log</h3>
+						<pre style="font-size: 0.5em;"><code>upgrade_events,package=autopay-parking-controller text="Upgrading autopay-parking-controller to 1.2.1213",old_version="1.2.1208",new_version="1.2.1213"
+upgrade_events,package=autopay-anpr text="Upgrading autopay-anpr to 1.2.431",old_version="1.2.426",new_version="1.2.431"</code></pre>
+					</section>
+					<section>
+						<h2>Kapacitor</h2>
+						<pre style="font-size: 0.5em;"><code>var data = stream
+    |from()
+        .measurement('anpr_camera_frame_count')
+        .database('twopark_no')
+        .groupBy(['camera-id', 'server'])
+    |window()
+        .period(120s)
+    |mean('value').as('value')
+    |stateDuration(lambda: "value" <= 5)
+        .unit(1m)
+        .as('state_duration')
+var trigger = data
+    |alert()
+        .crit(lambda: "state_duration" >= 20)
+        .slack()
+        .channel(slack_channel)</code></pre>
+					</section>
+					<section data-background="images/kapacitor_slack.png" data-background-size="contain">
+					</section>
+				</section>
+				<section>
+					<section data-background="images/IMG_4731.jpg" data-background-opacity="0.3" data-background-color="#000000">
+						<h1>Utfordring:</h1>
+						<h2>Re-installere 120 servere</h2>
+					</section>
+					<section>
+						<img src="images/ubuntu_black-orange_hex.svg" alt="Ubuntu" class="no-border" width="70%">
+					</section>
+					<section>
+						<h3>grub.cfg</h3>
+						<pre><code class="json">menuentry "Install Autopay Onsite" {
+  set gfxpayload=keep
+  linux /install/vmlinuz file=/cdrom/graphical.seed quiet
+  initrd /install/initrd.gz
+}</code></pre>
+					</section>
+					<section>
+						<h3>Preseed</h3>
+						<pre style="font-size: 0.5em;"><code>d-i	preseed/early_command	string	sh /cdrom/early_command.sh
+d-i	preseed/late_command	string	sh /cdrom/bootstrap-autopay.sh</code></pre>
+					</section>
+					<section>
+						<h3>debconf</h3>
+						<pre><code class="bash">db_progress START 0 12 autopay-bootstrap/progress
+db_progress STEP 5
+
+if [ "$FIRST_RUN" -eq 1 ]; then
+  db_fset autopay-bootstrap/hostname seen true
+  FIRST_RUN=0
+else
+  db_fset autopay-bootstrap/hostname seen false
+fi
+
+db_fset autopay-bootstrap/otp_code seen false
+db_input critical autopay-bootstrap/otp_code || true
+
+db_input critical autopay-bootstrap/hostname
+
+db_go || exit</code></pre>
+					</section>
+					<section data-background="images/IMG_20180613_093949.jpg" data-background-color="#000">
 					</section>
 				</section>
 				<section>
 					<section>
-						<h1>Oppsummering?</h1>
+						<h1>Håper dere har lært noe</h1>
 					</section>
 					<section data-logo="hide">
 						<img src="images/2Park_L_transp.png" alt="2Park" class="no-border" width="70%">
@@ -438,8 +534,9 @@ ssh-keygen -s server_ca -I "Stian_Mathiassen" \
 					</section>
 					<section>
 						<h1>Takk for meg!</h1>
-						<h3>Twitter: @smat</h3>
-						<h3>Epost: stian@2park.no</h3>
+						<h3><img src="images/Twitter_Social_Icon_Rounded_Square_Color.svg" alt="Twitter" class="no-border" width="5%"> @smat</h3>
+						<h3>stian@2park.no</h3>
+						<h3><a href="https://smat.github.io/javazone-2018/" class="link">https://smat.github.io/javazone-2018/</a></h3>
 						<aside class="notes">
 							Blir stående igjen for spørsmål
 						</aside>
@@ -459,18 +556,13 @@ ssh-keygen -s server_ca -I "Stian_Mathiassen" \
 			Reveal.initialize({
 				controls: false,
 				history: true,
+				slideNumber: "c",
 				dependencies: [
 					{ src: 'plugin/markdown/marked.js' },
 					{ src: 'plugin/markdown/markdown.js' },
 					{ src: 'plugin/notes/notes.js', async: true },
-					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-					// MathJax
-					{ src: 'plugin/math/math.js', async: true }
-				],
-				math: {
-					mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
-					config: 'TeX-AMS_HTML-full'  // See http://docs.mathjax.org/en/latest/config-files.html
-				}
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
 			});
 Reveal.addEventListener( 'slidechanged', function( event ) {
 	// event.previousSlide, event.currentSlide, event.indexh, event.indexv

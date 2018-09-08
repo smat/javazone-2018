@@ -100,15 +100,14 @@
   src: local("Source Serif Pro Bold"), local("SourceSerifPro-Bold"), url(https://fonts.gstatic.com/s/sourceserifpro/v5/neIXzD-0qpwxpaWvjeD0X88SAOeasc8btSyqxA.woff2) format("woff2");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
 
-/**
- * Solarized colors by Ethan Schoonover
- */
-html * {
-  color-profile: sRGB;
-  rendering-intent: auto; }
-
 section.has-dark-background, section.has-dark-background h1, section.has-dark-background h2, section.has-dark-background h3, section.has-dark-background h4, section.has-dark-background h5, section.has-dark-background h6 {
   color: #fff; }
+
+.reveal a.link {
+  color: #3A5FD5; }
+
+.reveal a.link:hover {
+  color: #7992e2; }
 
 div.reveal:after {
   content: "";
