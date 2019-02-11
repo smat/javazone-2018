@@ -31,7 +31,7 @@ vim: set foldcolumn=5 foldlevel=99 foldmethod=expr :
 			<div class="slides">
 				<section data-logo="hide" data-time="1">
 					<h1>Skikkelig<br/>garasje-IT</h1>
-					<p>Hvordan lager man et system når man har 160 servere i garasjer rundt i Europa</p>
+					<p>Hvordan lager man et system når man har<br/><strike>160</strike> 230 servere i garasjer rundt i Europa</p>
 				</section>
 				<!--
 				<section data-time="5">
@@ -58,7 +58,7 @@ vim: set foldcolumn=5 foldlevel=99 foldmethod=expr :
 					<section data-background="images/Autopay_large.png" data-background-size="50%" data-logo="hide">
 						<aside class="notes">
 							Vi lager et system som heter Autopay. Som er et parkeringssystem for enclosed parking.
-							DVS Parkeringshus og garasjer. Derav garasje-IT.
+							Dvs Parkeringshus og garasjer. Derav garasje-IT.
 						</aside>
 					</section>
 					<section data-background-video="images/Snapchat-1576533284.mp4" data-background-video-loop="true" data-background-video-muted="true" data-background-color="#000">
@@ -92,10 +92,11 @@ vim: set foldcolumn=5 foldlevel=99 foldmethod=expr :
 					</section>
 					<section data-background="images/autopay_map.png" data-background-size="contain">
 						<aside class="notes">
-							Systemet brukes nå i 7 land, og vi planlegger å utvide i enda flere steder
+							Systemet brukes nå i 7 land, og vi planlegger å utvide i enda flere steder<br/>
 							200 000 parkeringer per uke.<br/>
-							Forventer 70 M parkeringer neste år, og 800 M NOK i omsetning<br/>
-							78 anlegg, 120 i løpet av året, 240 neste år
+							Forventer 60 M parkeringer i år, og runder nok 1000 M NOK i omsetning<br/>
+							78 anlegg, rundet 100 fjor, 180 neste år.<br/>
+							Starter med Oslo Lufthavn Gardermoen og Mall of Scandinavia
 						</aside>
 					</section>
 					<!-- si noe om historien, og hvorfor vi gjør endringen jeg skal snakke om -->
@@ -125,20 +126,21 @@ vim: set foldcolumn=5 foldlevel=99 foldmethod=expr :
 						<h1>Utfordring:</h1>
 						<h2>Båndbredde for bilder</h2>
 						<aside class="notes">
-							Joke om samboer i bakgrunnen
+							Første utfordring: båndbredde.<br/>
+							Fortelle om "knagging"
 						</aside>
 					</section>
 					<section data-background="images/camera.jpg" data-background-color="#000">
 						<aside class="notes">
 							<ul>
 								<li>8 kamera, 720p, 10 bilder/sec</li>
-								<li>Lav båndbredde / ustabilt nett</li>
+								<li>Lav båndbredde / ustabilt nett, 4G</li>
 								<li>Må analysere bilder på stedet</li>
 							</ul>
 						</aside>
 					</section>
 					<section data-background="images/lockup_cloud_main.png" data-background-size="40%">
-						<p style="font-size: 4em;">&#10060;</p>
+						<p style="font-size: 3.5em;">&#10060;</p>
 						<aside class="notes">
 							<ul>
 								<li>Lav båndbredde / ustabilt nett</li>
@@ -278,6 +280,7 @@ message Rect {
 						<h1>Prøv Kotlin</h1>
 						<aside class="notes">
 							Kunne sagt noe abstrakt om dette, men er ganske enkelt: Prøv ut Kotlin!
+							Mange andre firma Vipps, Finn, Sparebank1, Gjensidige og Posten/Bring
 						</aside>
 					</section>
 				</section>
@@ -435,11 +438,8 @@ db_go || exit</code></pre>
 							VPN kan være ganske komplekst å sette opp. Vi har dårlig tid.
 						</aside>
 					</section>
-					<!--
-					<section>
-						<h1>Bilde av tunnell?</h1>
+					<section data-background="images/tunnel.svg" data-background-size="40%">
 					</section>
-					-->
 					<section>
 						<pre class="bash"><code>/usr/bin/autossh -M 0 \
   -o "StrictHostKeyChecking no" \
@@ -582,6 +582,7 @@ var trigger = data
 					</section>
 					<section>
 						<h1>Takk for meg!</h1>
+						<h3>https://2park.no/careers/</h3>
 						<h3><img src="images/Twitter_Social_Icon_Rounded_Square_Color.svg" alt="Twitter" class="no-border" width="5%"> @smat</h3>
 						<h3>stian@2park.no</h3>
 						<h3><a href="https://smat.github.io/javazone-2018/" class="link">https://smat.github.io/javazone-2018/</a></h3>
