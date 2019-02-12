@@ -73,7 +73,7 @@ vim: set foldcolumn=5 foldlevel=99 foldmethod=expr :
 							Eller hvis han er registrert på nettsida med skilt og kort, kan han bare kjøre ut igjen uten å gjør noe
 						</aside>
 					</section>
-					<section data-background-video="images/VID_20180418_144533.mp4" data-background-video-loop="true" data-background-video-muted="true" data-background-color="#000" data-time="3">
+					<section data-background-video="images/VID_20180418_144533.mp4" data-background-video-loop="true" data-background-video-muted="true" data-background-color="#000">
 						<aside class="notes">
 							Og da er det bare å kjøre ut igjen. Veldig enkelt.<br/>
 							Noen ganger må man kjøre en fullstacktest, som dere ser her
@@ -101,11 +101,12 @@ vim: set foldcolumn=5 foldlevel=99 foldmethod=expr :
 					</section>
 					<!-- si noe om historien, og hvorfor vi gjør endringen jeg skal snakke om -->
 				</section>
-				<section>
+				<section data-time="4">
 					<section data-background="images/jason-leung-770944-unsplash_ZV7lnfyQLmA.jpg">
 						<!-- <span class="attribution"><a href="https://unsplash.com/photos/ZV7lnfyQLmA">Jason Leung on Unspash</a></span> -->
 						<aside class="notes">
 							Started som et system for å skrive bøter. Autopay er nå fem år gammelt. Første anlegg i 2013.<br/>
+							Grovt sett kan man si at systemet består av to deler: Onsite + server<br/>
 							Eide ikke programvaren som kjørte i garasjene. Begynte å blir trøblete skalaen vi har i dag<br/>
 							Fikk ikke gjort så mange oppdateringer og endringer vi ønsket<br/>
 							Skrive for oss selv så vi har bedre kontroll og overvåkning<br/>
@@ -121,7 +122,7 @@ vim: set foldcolumn=5 foldlevel=99 foldmethod=expr :
 						</aside>
 					</section>
 				</section>
-				<section>
+				<section data-time="8">
 					<section data-background="images/IMG_4731.jpg" data-background-opacity="0.3" data-background-color="#000000">
 						<h1>Utfordring:</h1>
 						<h2>Båndbredde for bilder</h2>
@@ -160,6 +161,7 @@ vim: set foldcolumn=5 foldlevel=99 foldmethod=expr :
 								<li>Veldig vanskelig å få til den ytelsen vi ønsket oss</li>
 								<li>C++ kan gjenbruke minneområdet</li>
 								<li>Kraftige motion dection algoritmer, ferdig i OpenCV (finnes også for Java)</li>
+								<li>Tredjepart programvare for skiltdeteksjon, utnytte ressurser</li>
 							</ul>
 						</aside>
 					</section>
@@ -176,6 +178,8 @@ vim: set foldcolumn=5 foldlevel=99 foldmethod=expr :
 								<li>C++ er ikke enkelt</li>
 								<li>Ønsket å skrive forretingslogikken i Java</li>
 								<li>Passer meget bra til meldings-baserte flyter</li>
+								<li>Sender meldinger istedenfor å gjør funksjonskall</li>
+								<li>Detektere retning, analysere flere bilder</li>
 								<li>Systemet vi har rundt er meldingsbasert</li>
 								<li>ANPR meldingbasert</li>
 							</ul>
@@ -234,7 +238,7 @@ message Rect {
 					<!--
 				</section>
 					-->
-				<section>
+				<section data-time="4">
 					<section data-background="images/IMG_4731.jpg" data-background-opacity="0.3" data-background-color="#000000">
 						<h1>Utfordring:</h1>
 						<h2>Skriv et GUI på to uker</h2>
@@ -249,6 +253,8 @@ message Rect {
 						<img src="images/tornado-fx-logo.png" alt="TornadoFX" width="30%" class="no-border">
 						<aside class="notes">
 							Har brukt JavaFX med Kotlin og TornadoFX<br/>
+							Hva er Kotlin?</br/>
+							Hva er JavaFX? (arvtaker Swing)<br/>
 							Veldig fornøyd med det veldig mye enklere enn C++/Qt<br/>
 							Bruker også ZeroMQ og Protobuf for kommunikasjon med de andre prosessene
 						</aside>
@@ -258,7 +264,7 @@ message Rect {
     override val root = borderpane {
         top = menubar {
             menu("System") {
-                item("Exit") { exitGui()}
+                item("Exit") { exitGui() }
             }
         }
         center = AllLanesView(model)
@@ -284,13 +290,21 @@ message Rect {
 						</aside>
 					</section>
 				</section>
-				<section>
+				<section data-time="5">
 					<section data-background="images/IMG_4731.jpg" data-background-opacity="0.3" data-background-color="#000000">
 						<h1>Utfordring:</h1>
 						<h2>Re-installere 120 servere</h2>
+						<aside class="notes">
+							Neste fase. Rulle ut. Kjørte Windows før.
+						</aside>
 					</section>
 					<section>
 						<img src="images/ubuntu_black-orange_hex.svg" alt="Ubuntu" class="no-border" width="70%">
+						<aside class="notes">
+							Vi har lagt basert på Linux/Ubuntu<br/>
+							Mange installasjoner, gjort av installatører<br/>
+							Ikke alle av dem så har mye data-kompetanse. I hvertfall ikke Linux<br/>
+						</aside>
 					</section>
 					<section>
 						<h3>grub.cfg</h3>
@@ -299,11 +313,21 @@ message Rect {
   linux /install/vmlinuz file=/cdrom/graphical.seed quiet
   initrd /install/initrd.gz
 }</code></pre>
+						<aside class="notes">
+							Ikke bli skremt!<br/>
+							Vi utvidet Ubuntu sin installer!<br/>
+							Hva er grub?<br/>
+							Forklar kode.<br/>
+						</aside>
 					</section>
 					<section>
 						<h3>Preseed</h3>
 						<pre style="font-size: 0.5em;"><code>d-i	preseed/early_command	string	sh /cdrom/early_command.sh
 d-i	preseed/late_command	string	sh /cdrom/bootstrap-autopay.sh</code></pre>
+						<aside class="notes">
+							Ubuntu har konsept med preseed. Legg inn default konfigurasjon<br/>
+							Kan også legge inn egne script<br/>
+						</aside>
 					</section>
 					<section>
 						<h3>debconf</h3>
@@ -323,8 +347,14 @@ db_input critical autopay-bootstrap/otp_code || true
 db_input critical autopay-bootstrap/hostname
 
 db_go || exit</code></pre>
+						<aside class="notes">
+							Største kode-eksempelet i dag (neida, ikke helt).<br/>
+							Gå igjennom koden.
+						</aside>
 					</section>
 					<section data-background="images/onsite_otp.jpg" data-background-color="#000">
+						<aside class="notes">
+						</aside>
 					</section>
 					<section data-background="images/carl-newton-139379-unsplash.jpg" data-background-color="#000" data-background-opacity="0.3">
 						<h1>Velg teknologi som kan tilpasses</h1>
@@ -334,10 +364,15 @@ db_go || exit</code></pre>
 						</aside>
 					</section>
 				</section>
-				<section>
+				<section data-time="5">
 					<section data-background="images/IMG_4731.jpg" data-background-opacity="0.3" data-background-color="#000000">
 						<h1>Utfordring:</h1>
-						<h2>Oppdater 160 servere samtidig</h2>
+						<h2>Oppdater <strike>160</strike> 230 servere samtidig</h2>
+						<aside class="notes">
+							Etter at alle har installert, så må det fungere<br/>
+							Bommer kan ikke slutte å gå opp<br/>
+							Oppdateringer må ut!
+						</aside>
 					</section>
 					<section>
 						<img src="images/Ansible_logo.svg" class="no-border" alt="Ansible">
@@ -356,7 +391,9 @@ db_go || exit</code></pre>
   "ocr-server.yml"
 </code></pre>
 						<aside class="notes">
-							Bruker Ansible-pull, så vi ikke er avhengig av at SSH-tunnelen er oppe
+							Bruker Ansible-pull.<br/>
+							Kloner og laster ned metadata om hva som skal gjøres<br/>
+							Utfører.
 						</aside>
 					</section>
 					<section>
@@ -429,7 +466,7 @@ db_go || exit</code></pre>
 						</aside>
 					</section>
 				</section>
-				<section>
+				<section data-time="5">
 					<section data-background="images/IMG_4731.jpg" data-background-opacity="0.3" data-background-color="#000000">
 						<h1>Utfordring:</h1>
 						<h2>Serverene har ikke public IP</h2>
@@ -439,6 +476,10 @@ db_go || exit</code></pre>
 						</aside>
 					</section>
 					<section data-background="images/tunnel.svg" data-background-size="40%">
+						<aside class="notes">
+							Lager tunnell ut til en server<br/>
+							Kobler oss til denne serveren for å komme inn<br/>
+						</aside>
 					</section>
 					<section>
 						<pre class="bash"><code>/usr/bin/autossh -M 0 \
@@ -458,9 +499,13 @@ db_go || exit</code></pre>
 					</section>
 					<section>
 						<h1>Hva med autentisering</h1>
+						<aside class="notes">
+						</aside>
 					</section>
 					<section>
 						<h1>(Open)SSH certificates</h1>
+						<aside class="notes">
+						</aside>
 					</section>
 					<section>
 						<pre><code class="bash"># Create certificate
@@ -468,16 +513,22 @@ ssh-keygen -f server_ca
 # Sign certificate
 ssh-keygen -s server_ca -I "Stian_Mathiassen" \
   -V +10w ~/.ssh/id_rsa.pub</code></pre>
+						<aside class="notes">
+						</aside>
 					</section>
 					<section>
 						<h3>.ssh/authorized_keys</h3>
 						<pre><code>cert-authority ssh-rsa AAAAB...== 2Park CA</code></pre>
+						<aside class="notes">
+						</aside>
 					</section>
 					<section>
 						<h3>known_hosts</h3>
 						<pre style="font-size: 0.5em;" class="sql"><code>The authenticity of host 'host (8.8.8.8)' can't be established.
 ECDSA key fingerprint is SHA256:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcmoX+436BAPc.
 Are you sure you want to continue connecting (yes/no)?</code></pre>
+						<aside class="notes">
+						</aside>
 					</section>
 					<section data-background="images/carl-newton-139379-unsplash.jpg" data-background-color="#000" data-background-opacity="0.3">
 						<h1>Det enkle er ofte det beste</h1>
@@ -486,10 +537,13 @@ Are you sure you want to continue connecting (yes/no)?</code></pre>
 						</aside>
 					</section>
 				</section>
-				<section>
+				<section data-time="6">
 					<section data-background="images/IMG_4731.jpg" data-background-opacity="0.3" data-background-color="#000000">
 						<h1>Utfordring:</h1>
 						<h2>Hvordan vet man at det fungerer?</h2>
+						<aside class="notes">
+							Kanskje det viktigste med systemet!
+						</aside>
 					</section>
 					<section data-background="images/monitoring_flow.svg" data-background-size="90%">
 						<aside class="notes">
@@ -517,12 +571,22 @@ Are you sure you want to continue connecting (yes/no)?</code></pre>
   write_consistency = "any"
   username = "twopark_no"
   password = "abcd"</code></pre>
+						<aside class="notes">
+							Telegraf er enkelt å sette opp<br/>
+							Gir masse data<br/>
+						</aside>
 					</section>
 					<section data-background="images/grafana_advanced.png" data-background-size="contain" data-background-color="#171819">
+						<aside class="notes">
+						</aside>
 					</section>
 					<section data-background="images/grafana.png" data-background-size="contain" data-background-color="#171819">
+						<aside class="notes">
+						</aside>
 					</section>
 					<section data-background="images/grafana_tag.png" data-background-size="contain" data-background-color="#171819">
+						<aside class="notes">
+						</aside>
 					</section>
 					<section>
 						<h3>Telegraf</h3>
@@ -532,6 +596,8 @@ Are you sure you want to continue connecting (yes/no)?</code></pre>
 						<h3>send_to_influxdb.log</h3>
 						<pre style="font-size: 0.5em;"><code>upgrade_events,package=autopay-parking-controller text="Upgrading autopay-parking-controller to 1.2.1213",old_version="1.2.1208",new_version="1.2.1213"
 upgrade_events,package=autopay-anpr text="Upgrading autopay-anpr to 1.2.431",old_version="1.2.426",new_version="1.2.431"</code></pre>
+						<aside class="notes">
+						</aside>
 					</section>
 					<section>
 						<h2>Kapacitor</h2>
@@ -551,8 +617,12 @@ var trigger = data
         .crit(lambda: "state_duration" >= 20)
         .slack()
         .channel(slack_channel)</code></pre>
+						<aside class="notes">
+						</aside>
 					</section>
 					<section data-background="images/kapacitor_slack.png" data-background-size="contain">
+						<aside class="notes">
+						</aside>
 					</section>
 					<section data-background="images/carl-newton-139379-unsplash.jpg" data-background-color="#000" data-background-opacity="0.3">
 						<h1>Hent inn mye data om systemet ditt</h1>
@@ -562,7 +632,7 @@ var trigger = data
 						</aside>
 					</section>
 				</section>
-				<section>
+				<section data-time="1">
 					<section data-background="images/carl-newton-139379-unsplash.jpg" data-background-color="#000" data-background-opacity="0.3">
 						<ul style="font-size: 1.3em;">
 							<li>Ikke farlig å bruke forskjellige teknologier</li>
@@ -572,6 +642,8 @@ var trigger = data
 							<li>Det enkle er ofte det beste</li>
 							<li>Hent inn mye data om systemet ditt</li>
 						</ul>
+						<aside class="notes">
+						</aside>
 					</section>
 					<section data-logo="hide">
 						<img src="images/2Park_L_transp.png" alt="2Park" class="no-border" width="70%">
@@ -624,7 +696,7 @@ Reveal.addEventListener( 'slidechanged', function( event ) {
 } );
 
 		_.chain(document.querySelectorAll("section"))
-				.filter(function(e) { return e.parentElement.nodeName !== "SECTION" })
+				//.filter(function(e) { return e.parentElement.nodeName !== "SECTION" })
 				.reduce(function(t, e) {
 					if (e.dataset && e.dataset['time']) {
 						t.timing = t.next;
